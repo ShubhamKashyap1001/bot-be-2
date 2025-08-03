@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/endpoints/codeforces.ts","./src/services/cron/cron.service.ts"],"version":"5.8.2"}
+{"root":["./src/index.ts","./src/endpoints/codeforces.ts","./src/services/cron/cron.service.ts","./src/services/email/email.service.ts"],"version":"5.8.2"}
