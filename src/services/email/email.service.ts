@@ -1,6 +1,6 @@
 import nodemailer, { createTransport } from "nodemailer"
 import dotenv from "dotenv";
-import { generateMessageText } from "../link/codeforces/link.codeforces";
+import { generateMessageHTML } from "../link/codeforces/link.codeforces";
 dotenv.config();
 const transporter = createTransport({
     service: 'gmail',
@@ -10,13 +10,16 @@ const transporter = createTransport({
     }
 })
 
+
+
 export const sendEmail = async () => {
-  const message =await  generateMessageText()
+  const message = await generateMessageHTML();
+
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: "shubh9142996613@gmail.com", 
-    subject: "Automated Email",
-    text: message,
+    to: "shubh9142996613@gmail.com",
+    subject: "Your Daily Codeforces Problems",
+    html: message,
   };
 
   try {
@@ -26,3 +29,4 @@ export const sendEmail = async () => {
     console.error("Error sending email:", error);
   }
 };
+
