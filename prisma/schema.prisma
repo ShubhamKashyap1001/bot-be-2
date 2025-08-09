@@ -20,7 +20,8 @@ model codeforcesProblem {
 
   @@unique([contestId, index])
 }
-model user{
-  email String @unique
+
+model user {
+  email    String @unique
   password String
 }
