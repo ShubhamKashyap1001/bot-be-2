@@ -13,7 +13,7 @@ app.use("/auth", authRoutes);
 //fetch()
 app.listen(3000,()=>{
     // here i am calling my cron
-    testCron()
+    //testCron()
     console.log("Server is up");
     
 })
