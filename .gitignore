@@ -1,9 +1,18 @@
-
+# Dependencies
 node_modules
 
+# Build output
 dist
-generated/prisma
 
+# Environment variables
 .env
+
+# Editor config
 .vscode
+
+# Logs
 *.log
+
+# Ignore Prisma client if generated locally
+# (Will require running `npx prisma generate` after pulling changes)
+prisma/client
