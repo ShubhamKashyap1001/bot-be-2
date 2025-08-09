@@ -11,6 +11,6 @@ app.get('/',(req,res)=>{
 app.listen(3000,()=>{
     // here i am calling my cron
     testCron()
-    console.log("Server is runnig");
+    console.log("Server is up");
     
 })

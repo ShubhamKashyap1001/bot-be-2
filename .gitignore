@@ -12,7 +12,7 @@ dist
 
 # Logs
 *.log
-
+generated
 # Ignore Prisma client if generated locally
 # (Will require running `npx prisma generate` after pulling changes)
 prisma/client
