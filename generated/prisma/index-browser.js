@@ -132,6 +132,7 @@ exports.Prisma.CodeforcesProblemScalarFieldEnum = {
 };
 
 exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
   email: 'email',
   password: 'password'
 };

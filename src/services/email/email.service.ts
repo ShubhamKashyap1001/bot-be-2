@@ -1,8 +1,8 @@
 import nodemailer, { createTransport } from "nodemailer"
 import dotenv from "dotenv";
 import { generateMessageHTML } from "../link/codeforces/link.codeforces";
-import { PrismaClient } from "../../../generated/prisma";
-const prisma = new PrismaClient()
+import { Worker } from "bullmq";
+import { redisConnection } from "../Queue/user.queue";
 dotenv.config();
 const transporter = createTransport({
   service: 'gmail',
@@ -11,23 +11,25 @@ const transporter = createTransport({
     pass: process.env.EMAIL_PASS,
   }
 })
-export const sendEmail = async () => {
-  const user = await prisma.user.findMany({})
-  for (const u of user) {
-    const message = await generateMessageHTML();
+export const worker = new Worker(
+  "emailQueue",
+  async (job) => {
+    const { email } = job.data
+    console.log("Sending email to:", email);
+    if (!email) {
+      throw new Error("No recipient email provided in job data");
+    }
+    const message = await generateMessageHTML()
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: u.email,
+      to: email,
       subject: "Your Daily Codeforces Problems",
       html: message,
     };
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Email sent:", u.email);
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
-  }
-};
-
-// like send the mail one by one 
+    await transporter.sendMail(mailOptions);
+    console.log(`Email sent to ${email}`);
+  }, {
+  connection: redisConnection,
+  concurrency: 5,
+}
+)
