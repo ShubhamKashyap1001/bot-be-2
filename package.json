@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon dist/index.js",
     "build": "tsc -b",
-    "worker":"node dist/services/email/email.service.js"
+    "worker": "node dist/services/email/email.service.js"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.2.1",
     "prisma": "^6.13.0"
   }
 }

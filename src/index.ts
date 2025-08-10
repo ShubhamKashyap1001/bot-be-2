@@ -9,5 +9,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 
 app.listen(3000,()=>{
-    testCron()
+    console.log("server is upp...");
+    
+    //testCron()
 })

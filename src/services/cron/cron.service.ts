@@ -14,6 +14,6 @@ export const queueClear = async () => {
 // add user to queue
 export const testCron = () => {
    cron.schedule('* * * * * *', async () => {
-      await addUserToRedisQueue()
+      //await addUserToRedisQueue()
    })
 }
