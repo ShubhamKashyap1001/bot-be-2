@@ -1,23 +1,19 @@
 import cron from 'node-cron'
 import { addUserToRedisQueue, emailQueue } from '../Queue/user.queue'
-import { worker } from '../email/email.service';
-export const redisQueueManagement = async () => {
-   cron.schedule('0 59 6 * * *', async () => {
-    await emailQueue.drain(); 
-    console.log("Queue drained before 7 AM");
-
-    await addUserToRedisQueue(); 
-    console.log("Added all users to queue before 7 AM");
-  });
+// clear the queue
+export const queueClear = async () => {
+   cron.schedule('* * * * * *', async () => {
+      await emailQueue.clean(0, 1000, 'completed');
+      await emailQueue.clean(0, 1000, 'failed');
+      await emailQueue.clean(0, 1000, 'delayed');
+      await emailQueue.drain();
+      await emailQueue.obliterate({ force: true });
+      console.log("Queue drained before 7 AM");
+   });
 }
-
+// add user to queue
 export const testCron = () => {
-   cron.schedule('0 0 7 * * *', async () => {
-      worker.on("completed", (job) => {
-         console.log(`Job ${job.id} completed`);
-      });
-      worker.on("failed", (job, err) => {
-         console.error(`Job ${job?.id} failed:`, err);
-      });
+   cron.schedule('* * * * * *', async () => {
+      await addUserToRedisQueue()
    })
 }

@@ -11,25 +11,47 @@ const transporter = createTransport({
     pass: process.env.EMAIL_PASS,
   }
 })
+
 export const worker = new Worker(
+  
   "emailQueue",
   async (job) => {
-    const { email } = job.data
-    console.log("Sending email to:", email);
+    console.log("Worker started");
+
+    console.log("Job data:", job.data);
+    const { email } = job.data;
+
     if (!email) {
       throw new Error("No recipient email provided in job data");
     }
-    const message = await generateMessageHTML()
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: "Your Daily Codeforces Problems",
-      html: message,
-    };
-    await transporter.sendMail(mailOptions);
-    console.log(`Email sent to ${email}`);
-  }, {
-  connection: redisConnection,
-  concurrency: 5,
-}
-)
+
+    try {
+      const message = await generateMessageHTML();
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Your Daily Codeforces Problems",
+        html: message,
+      };
+      await transporter.sendMail(mailOptions);
+      //console.log(`Email sent to ${email}`);
+    } catch (error) {
+      console.error(`Failed to send email to ${email}:`, error);
+      throw error; 
+    }
+  },
+  {
+    connection: redisConnection,
+    concurrency: 5,
+  }
+);
+
+worker.on("completed", (job) => {
+  console.log(`Job ${job.id} completed`);
+});
+worker.on("failed", (job, err) => {
+  console.error(`Job ${job?.id} failed:`, err);
+});
+worker.on('error', err => {
+  console.error('Worker error:', err);
+});

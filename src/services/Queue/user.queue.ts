@@ -19,8 +19,7 @@ export const emailQueue = new Queue("emailQueue", {
 export const addUserToRedisQueue = async () => {
     const user:User[] = await prisma.user.findMany({})
     //console.log(user.length);
-    
     for (const u of user){
-        await emailQueue.add("email", { email: u.email })
+      await emailQueue.add("email", { email: u.email })
     }
 };
