@@ -1,1 +1,1 @@
-## Worker for main backend
+## Node + redis
